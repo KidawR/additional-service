@@ -17,11 +17,3 @@ public class AdditionalServiceApplication {
 	}
 }
 
-@Configuration
-class AppConfig {
-	@Bean
-	public RestTemplate restTemplate() {
-		return new RestTemplate();
-	}
-}
-
