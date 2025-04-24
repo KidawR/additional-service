@@ -7,12 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Ticket {
-    public enum Sector {
-        A,
-        B,
-        C,
-        D
-    }
+
     @NonNull
     private long id;
     @NonNull
@@ -21,8 +16,8 @@ public class Ticket {
     public long viewerId;
     @NonNull
     public String date;
-    public Sector sector;
-    public Ticket(long id, long artistId, long viewerId, String date, Sector sector) {
+    public String sector;
+    public Ticket(long id, long artistId, long viewerId, String date, String sector) {
         this.id = id;
         this.artistId = artistId;
         this.viewerId = viewerId;

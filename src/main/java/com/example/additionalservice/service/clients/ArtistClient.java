@@ -14,7 +14,12 @@ public class ArtistClient {
         this.apiProperties = apiProperties;
     }
 
-    public Artist[] getAllArtists() {
-        return restTemplate.getForObject(apiProperties.getBaseUrl() + "/artists", Artist[].class);
+    public Artist getArtistById(long id) {
+        try {
+            return restTemplate.getForObject(apiProperties.getBaseUrl() + "/artists/" + id, Artist.class);
+        } catch (Exception e) {
+            System.err.println("Failed to fetch artist with ID " + id + ": " + e.getMessage());
+            return null;
+        }
     }
 }
