@@ -6,6 +6,7 @@ import com.example.additionalservice.model.SectorStatsExtended;
 import com.example.additionalservice.model.Ticket;
 import com.example.additionalservice.service.clients.ArtistClient;
 import com.example.additionalservice.service.clients.TicketClient;
+import com.example.additionalservice.service.statistics.ObservabilityService;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -16,13 +17,15 @@ public class StatsService {
 
     private final TicketClient ticketClient;
     private final ArtistClient artistClient;
-
-    public StatsService(TicketClient ticketClient, ArtistClient artistClient) {
+    private final ObservabilityService observabilityService;
+    public StatsService(TicketClient ticketClient, ArtistClient artistClient, ObservabilityService observabilityService) {
         this.ticketClient = ticketClient;
         this.artistClient = artistClient;
+        this.observabilityService = observabilityService;
     }
 
     public List<SectorStatsExtended> getSectorStatsByArtistAndSector() {
+        this.observabilityService.start(getClass().getSimpleName() + ":getStatsByArtist");
         Ticket[] tickets = ticketClient.getAllTickets();
         Artist[] artists = artistClient.getAllArtists();
 
@@ -37,7 +40,7 @@ public class StatsService {
                         Collectors.counting()
                 ));
 
-        return grouped.entrySet().stream().map(entry -> {
+        List<SectorStatsExtended> temp = grouped.entrySet().stream().map(entry -> {
             String[] parts = entry.getKey().split("#");
             Long artistId = Long.valueOf(parts[0]);
             String sector = parts[1];
@@ -49,5 +52,7 @@ public class StatsService {
                     entry.getValue()
             );
         }).collect(Collectors.toList());
+        this.observabilityService.stop(getClass().getSimpleName() + ":getStatsByArtist");
+        return temp;
     }
 }
