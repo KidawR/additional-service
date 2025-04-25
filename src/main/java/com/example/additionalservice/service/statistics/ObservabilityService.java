@@ -11,7 +11,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.stream.Collectors;
-@Service
 public class ObservabilityService {
     private static final Instant PENDING_STOP = null;
 
