@@ -19,8 +19,8 @@ public class ArtistCacheService {
     private final ObservabilityService observabilityService;
     public ArtistCacheService(ObservabilityService observabilityService) {
         this.observabilityService = observabilityService;
-        scheduler.scheduleAtFixedRate(() ->
-                System.out.println("[Artist Cache] Current size: " + this.cacheSize()), 0, 30, TimeUnit.SECONDS);
+        //scheduler.scheduleAtFixedRate(() ->
+        //        System.out.println("[Artist Cache] Current size: " + this.cacheSize()), 0, 30, TimeUnit.SECONDS);
     }
     public Artist getArtist(Long artistId) {
 

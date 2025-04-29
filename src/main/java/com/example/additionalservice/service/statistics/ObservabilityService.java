@@ -92,18 +92,29 @@ public class ObservabilityService {
             }
         }
 
+<<<<<<< Updated upstream
         // Теперь централизованный вывод:
+=======
+        //System.out.println("\n--- Observability statistics (delay = " + delay + " ms) ---");
+>>>>>>> Stashed changes
         String timestamp = "[" + formatter.format(now) + "]";
         System.out.println("\nPrint observability statistics in delay: " + delay);
 
         for (Map.Entry<String, Map<Integer, Double>> entry : stats.entrySet()) {
             String name = entry.getKey();
+<<<<<<< Updated upstream
             Map<Integer, Double> intervalStats = entry.getValue();
 
             for (Map.Entry<Integer, Double> statEntry : intervalStats.entrySet()) {
                 int interval = statEntry.getKey();
                 double avg = statEntry.getValue();
                 System.out.println(timestamp + " - " + interval + " : " + name + " - " + avg + " s.");
+=======
+            for (Map.Entry<Integer, Double> intervalEntry : entry.getValue().entrySet()) {
+                int interval = intervalEntry.getKey();
+                double avgDuration = intervalEntry.getValue();
+                //System.out.println(timestamp + " - " + interval + "s : " + name + " - " + avgDuration + " s.");
+>>>>>>> Stashed changes
             }
         }
     }
