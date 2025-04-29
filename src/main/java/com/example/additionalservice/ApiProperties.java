@@ -13,9 +13,6 @@ public class ApiProperties {
     @Value("${core.service.port}")
     private String coreServicePort;
 
-    @Value("${service.statistic.delay:5000}")
-    private int delay;
-    private String baseUrl;
     public String getBaseUrl() {
         return "http://" + coreServiceHost + ":" + coreServicePort;
     }
