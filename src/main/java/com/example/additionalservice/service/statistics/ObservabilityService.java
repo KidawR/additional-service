@@ -61,7 +61,9 @@ public class ObservabilityService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
                 .withZone(ZoneId.systemDefault());
 
+
         int maxInterval = intervals.stream().max(Integer::compare).orElse(0);
+
         removeOldTimings(now, maxInterval);
 // копить в хэш мапе потом все выводить
         Set<String> uniqueNames = getUniqueNamesByTiming(snapshot);
