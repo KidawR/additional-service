@@ -61,16 +61,17 @@ public class ObservabilityService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
                 .withZone(ZoneId.systemDefault());
 
-        int maxInterval = intervals.stream().max(Integer::compare).get();
+
+        int maxInterval = intervals.stream().max(Integer::compare).orElse(0);
+
         removeOldTimings(now, maxInterval);
-
+// копить в хэш мапе потом все выводить
         Set<String> uniqueNames = getUniqueNamesByTiming(snapshot);
-
-        // сюда собираем статистику и потом выводим единым выводом
-        Map<String, Map<Integer, Double>> stats = new HashMap<>();
+        Map<String, Map<Integer, Double>> statisticsMap = new HashMap<>();
 
         for (String name : uniqueNames) {
             Map<Integer, Double> intervalStats = new HashMap<>();
+
             for (int interval : intervals) {
                 List<Timing> filteredTimings = snapshot.stream()
                         .filter(t -> t.getStop() != PENDING_STOP
@@ -82,39 +83,26 @@ public class ObservabilityService {
                 if (!filteredTimings.isEmpty()) {
                     double averageDuration = filteredTimings.stream()
                             .mapToLong(t -> Duration.between(t.getStart(), t.getStop()).toMillis())
-                            .average().getAsDouble();
+                            .average().orElse(0.0);
 
-                    intervalStats.put(interval, averageDuration / 1000); // секунды
+                    intervalStats.put(interval, averageDuration / 1000); // в секундах
                 }
             }
+
             if (!intervalStats.isEmpty()) {
-                stats.put(name, intervalStats);
+                statisticsMap.put(name, intervalStats);
             }
         }
 
-<<<<<<< Updated upstream
-        // Теперь централизованный вывод:
-=======
-        //System.out.println("\n--- Observability statistics (delay = " + delay + " ms) ---");
->>>>>>> Stashed changes
+        System.out.println("\n--- Observability statistics (delay = " + delay + " ms) ---");
         String timestamp = "[" + formatter.format(now) + "]";
-        System.out.println("\nPrint observability statistics in delay: " + delay);
 
-        for (Map.Entry<String, Map<Integer, Double>> entry : stats.entrySet()) {
+        for (Map.Entry<String, Map<Integer, Double>> entry : statisticsMap.entrySet()) {
             String name = entry.getKey();
-<<<<<<< Updated upstream
-            Map<Integer, Double> intervalStats = entry.getValue();
-
-            for (Map.Entry<Integer, Double> statEntry : intervalStats.entrySet()) {
-                int interval = statEntry.getKey();
-                double avg = statEntry.getValue();
-                System.out.println(timestamp + " - " + interval + " : " + name + " - " + avg + " s.");
-=======
             for (Map.Entry<Integer, Double> intervalEntry : entry.getValue().entrySet()) {
                 int interval = intervalEntry.getKey();
                 double avgDuration = intervalEntry.getValue();
-                //System.out.println(timestamp + " - " + interval + "s : " + name + " - " + avgDuration + " s.");
->>>>>>> Stashed changes
+                System.out.println(timestamp + " - " + interval + "s : " + name + " - " + avgDuration + " s.");
             }
         }
     }
