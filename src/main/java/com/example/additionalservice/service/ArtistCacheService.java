@@ -22,6 +22,7 @@ public class ArtistCacheService {
         //scheduler.scheduleAtFixedRate(() ->
         //        System.out.println("[Artist Cache] Current size: " + this.cacheSize()), 0, 30, TimeUnit.SECONDS);
     }
+    public void cacheArtist() {artistCache.clear();}
     public Artist getArtist(Long artistId) {
 
         this.observabilityService.start(getClass().getSimpleName() + ":getArtistCache");
