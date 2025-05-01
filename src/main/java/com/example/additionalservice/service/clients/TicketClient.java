@@ -4,8 +4,12 @@ package com.example.additionalservice.service.clients;
 import com.example.additionalservice.ApiProperties;
 import com.example.additionalservice.model.Ticket;
 import com.example.additionalservice.service.statistics.ObservabilityService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 @Component
 public class TicketClient {
@@ -18,10 +22,16 @@ public class TicketClient {
         this.observabilityService = observabilityService;
     }
 
+    @CircuitBreaker(name = "CORE_SERVICE", fallbackMethod = "fallback")
+    @Retry(name = "CORE_SERVICE")
     public Ticket[] getAllTickets() {
         this.observabilityService.start(getClass().getSimpleName() + ":getAllTickets");
         Ticket[] temp = restTemplate.getForObject(apiProperties.getBaseUrl() + "/tickets", Ticket[].class);
         this.observabilityService.stop(getClass().getSimpleName() + ":getAllTickets");
         return temp;
+    }
+    private Ticket[] fallback(Long id, Exception e) {
+        System.out.println("Fallback for getAllTickets triggered: " + e.getMessage());
+        return null;
     }
 }
