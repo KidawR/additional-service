@@ -17,7 +17,7 @@ public class ArtistClient {
         this.apiProperties = apiProperties;
         this.observabilityService = observabilityService;
     }
-    @CircuitBreaker(name = "CORE_SERVICE", fallbackMethod = "fallback")
+    @CircuitBreaker(name = "CORE_SERVICE")
     public Artist getArtistById(long id) {
         this.observabilityService.start(getClass().getSimpleName() + ":getArtistById");
         Artist temp = null;
@@ -28,9 +28,5 @@ public class ArtistClient {
         }
         this.observabilityService.stop(getClass().getSimpleName() + ":getArtistById");
         return temp;
-    }
-    private Artist fallback(Exception e) {
-        System.out.println("Fallback for getArtistById triggered: " + e.getMessage());
-        return null;
     }
 }

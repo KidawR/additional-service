@@ -23,15 +23,12 @@ public class TicketClient {
         this.observabilityService = observabilityService;
     }
 
-    @CircuitBreaker(name = "CORE_SERVICE", fallbackMethod = "fallback")
+    @CircuitBreaker(name = "CORE_SERVICE")
     public Ticket[] getAllTickets() {
         this.observabilityService.start(getClass().getSimpleName() + ":getAllTickets");
         Ticket[] temp = restTemplate.getForObject(apiProperties.getBaseUrl() + "/tickets", Ticket[].class);
         this.observabilityService.stop(getClass().getSimpleName() + ":getAllTickets");
         return temp;
     }
-    private Artist fallback(Exception e) {
-        System.out.println("Fallback for getAllTickets triggered: " + e.getMessage());
-        return null;
-    }
+
 }
