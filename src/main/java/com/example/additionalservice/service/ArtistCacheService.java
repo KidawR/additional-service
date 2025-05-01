@@ -17,6 +17,10 @@ public class ArtistCacheService {
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     private final ObservabilityService observabilityService;
+
+    public void clearCache(){
+        this.artistCache.clear();
+    }
     public ArtistCacheService(ObservabilityService observabilityService) {
         this.observabilityService = observabilityService;
         //scheduler.scheduleAtFixedRate(() ->
