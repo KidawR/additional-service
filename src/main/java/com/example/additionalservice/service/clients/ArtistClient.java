@@ -15,7 +15,6 @@ public class ArtistClient {
         this.apiProperties = apiProperties;
         this.observabilityService = observabilityService;
     }
-
     public Artist getArtistById(long id) {
         this.observabilityService.start(getClass().getSimpleName() + ":getArtistById");
         Artist temp = null;
